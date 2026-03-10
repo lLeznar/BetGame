@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+vendor/
+
+# Environment
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+
+# IDEs
+.idea/
+.vscode/
+.fleet/
+.nova/
+.zed/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Laravel specific
+backend/storage/*.key
+backend/storage/pail
+backend/public/build
+backend/public/hot
+backend/public/storage
+backend/storage/logs/*.log
+
+# Frontend specific
+frontend/dist/

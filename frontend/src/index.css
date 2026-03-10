@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Outfit:wght@400;600;800&display=swap');
+
+:root {
+  --color-felt:       #0b6623;    /* Poker table green */
+  --color-felt-dark:  #064016;
+  --color-gold:       #d4af37;    /* Accents */
+  --color-red-debt:   #ff1744;    /* Negative balance */
+  --color-card-white: #fafafa;
+  --color-card-back:  #1a237e;    /* Card back deep blue */
+  --color-text:       #f5f5f5;
+  --color-surface:    rgba(0, 0, 0, 0.4);
+  --font-display:     'Outfit', sans-serif;
+  --font-mono:        'JetBrains Mono', monospace;
+  --radius:           12px;
+  --shadow-card:      0 4px 20px rgba(0,0,0,0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-display);
+  background: radial-gradient(circle at center, var(--color-felt), var(--color-felt-dark));
+  color: var(--color-text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  transition: all 0.2s ease;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 800;
+}
+
+/* Animations */
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(255, 23, 68, 0.7); }
+  70% { box-shadow: 0 0 0 10px rgba(255, 23, 68, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 23, 68, 0); }
+}
+
+.debt-warning {
+  color: var(--color-red-debt);
+  animation: pulse 2s infinite;
+}
