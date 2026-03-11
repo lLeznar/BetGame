@@ -27,7 +27,10 @@ class GameController extends Controller
         // Only banker can create games (in a real app you might check gate/policy)
         $game = $this->gameService->createGame($request->user(), $request->settings);
         
-        return response()->json($game->load('banker'), 201);
+        // Banker also joins as a player (with 0 balance initially, they can add funds later)
+        $this->gameService->joinGame($game, $request->user(), 0);
+        
+        return response()->json($game->load(['banker', 'gamePlayers.user']), 201);
     }
 
     public function show(Game $game)
@@ -51,6 +54,7 @@ class GameController extends Controller
     {
         $player = $this->gameService->joinGame($game, $request->user(), $request->buy_in);
         
+        $game->refresh();
         broadcast(new GameStateUpdated($game))->toOthers();
         
         return response()->json($player, 200);

@@ -34,7 +34,7 @@ const ActionBtn = styled.button`
   }
 `;
 
-export const ActionBar = ({ disabled, onCall, onFold, callAmount }) => {
+export const ActionBar = ({ disabled, onCall, onCheck, onFold, callAmount }) => {
   const isCheck = callAmount === 0;
 
   return (
@@ -54,9 +54,9 @@ export const ActionBar = ({ disabled, onCall, onFold, callAmount }) => {
       <ActionBtn 
         $variant="call" 
         disabled={disabled} 
-        onClick={onCall}
+        onClick={isCheck ? onCheck : onCall}
       >
-        {isCheck ? 'Check' : `Call ${formatPeso(callAmount)}`}
+        {isCheck ? 'Check ✓' : `Call ${formatPeso(callAmount)}`}
       </ActionBtn>
     </Bar>
   );

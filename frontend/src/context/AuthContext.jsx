@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import api from '../services/api';
+import { resetEcho } from '../services/echo';
 
 export const AuthContext = createContext(null);
 
@@ -9,10 +10,19 @@ export const AuthProvider = ({ children }) => {
 
     const loadUser = async () => {
         try {
+            // Re-attach token from localStorage if present (survives page refresh)
+            const savedToken = localStorage.getItem('auth_token');
+            if (savedToken) {
+                api.defaults.headers.common['Authorization'] = `Bearer ${savedToken}`;
+            }
+
             const response = await api.get('/auth/me');
             setUser(response.data);
         } catch (error) {
             setUser(null);
+            // Clear stale token if re-auth failed
+            localStorage.removeItem('auth_token');
+            delete api.defaults.headers.common['Authorization'];
         } finally {
             setLoading(false);
         }
@@ -34,6 +44,8 @@ export const AuthProvider = ({ children }) => {
              localStorage.setItem('auth_token', response.data.token);
              api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
         }
+        // Reset Echo so it rebuilds with the fresh token
+        resetEcho();
         return response.data;
     };
 
@@ -45,6 +57,8 @@ export const AuthProvider = ({ children }) => {
              localStorage.setItem('auth_token', response.data.token);
              api.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
         }
+        // Reset Echo so it rebuilds with the fresh token
+        resetEcho();
         return response.data;
     };
 
@@ -55,6 +69,7 @@ export const AuthProvider = ({ children }) => {
             setUser(null);
             localStorage.removeItem('auth_token');
             delete api.defaults.headers.common['Authorization'];
+            resetEcho();
         }
     };
 

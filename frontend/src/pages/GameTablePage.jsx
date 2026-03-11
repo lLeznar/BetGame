@@ -52,26 +52,33 @@ const MyArea = styled.div`
   margin-right: auto;
 `;
 
+const PageWrapper = styled.div`
+  padding-bottom: 120px;
+  min-height: 100vh;
+`;
+
 export const GameTablePage = () => {
   const { gameId } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { 
     game, 
-    myHand, 
+    myHand,
+    roundResult,
     fetchGameState, 
     placeBet, 
     call, 
+    check,
     fold, 
     startRound, 
     settleRound, 
     addFunds,
     getCallAmount,
-    joinGame
+    joinGame,
+    clearRoundResult
   } = useGame();
   
   const [callAmountDelta, setCallAmountDelta] = React.useState(0);
-  const [showResult, setShowResult] = React.useState(null); // { winners, payouts, pot_total }
   const [sideBetHit, setSideBetHit] = React.useState(null); // { type, payout }
 
   // Initial fetch
@@ -111,7 +118,7 @@ export const GameTablePage = () => {
   const isMyTurn = game.phase === 'betting' && myPlayerInfo && !myPlayerInfo.is_folded;
 
   return (
-    <>
+    <PageWrapper>
       <Header>
         <div style={{ color: '#aaa' }}>Table: <strong style={{ color: 'white' }}>#{game.id}</strong></div>
         <div style={{ display: 'flex', gap: 15 }}>
@@ -154,6 +161,7 @@ export const GameTablePage = () => {
           <ActionBar 
             disabled={!isMyTurn}
             onCall={call}
+            onCheck={check}
             onFold={fold}
             callAmount={callAmountDelta}
           />
@@ -201,12 +209,12 @@ export const GameTablePage = () => {
       )}
 
       <RoundResultModal 
-        result={showResult} 
+        result={roundResult} 
         isBanker={user.is_banker} 
-        onClose={() => setShowResult(null)} 
+        onClose={clearRoundResult} 
         onNextRound={startRound}
       />
       
-    </>
+    </PageWrapper>
   );
 };

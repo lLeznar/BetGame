@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('round_id')->constrained()->onDelete('cascade');
             $table->foreignId('game_player_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 12, 2)->default(0); // Signed
-            $table->enum('bet_type', ['ante', 'raise', 'call', 'fold']);
+            $table->enum('bet_type', ['ante', 'raise', 'call', 'check', 'fold']);
             $table->timestamps();
         });
     }

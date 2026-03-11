@@ -85,6 +85,29 @@ class BettingController extends Controller
         }
     }
 
+    public function check(Request $request, Round $round)
+    {
+        try {
+            $player = $this->getPlayer($request, $round);
+
+            // Verify no one has raised — call amount must be 0 to allow a check
+            $callAmount = $this->bettingService->calculateCallAmount($player, $round);
+            if ($callAmount > 0) {
+                return response()->json(['message' => 'Cannot check — there is an active raise. You must call or fold.'], 400);
+            }
+
+            $bet = $this->bettingService->placeBet($player, \App\Enums\BetType::Check, 0);
+
+            $game = $round->game;
+            broadcast(new BetPlaced($game->id, $player->user->name, \App\Enums\BetType::Check, 0, $game->currentPot()));
+            broadcast(new GameStateUpdated($game));
+
+            return response()->json($bet, 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 400);
+        }
+    }
+
     public function fold(Request $request, Round $round)
     {
         try {
