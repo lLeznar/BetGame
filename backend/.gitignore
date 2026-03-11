@@ -14,6 +14,10 @@
 /auth.json
 /node_modules
 /public/build
+
+# SQLite databases (unused — project uses PostgreSQL)
+/database/*.sqlite
+/database/*.sqlite-journal
 /public/hot
 /public/storage
 /storage/*.key

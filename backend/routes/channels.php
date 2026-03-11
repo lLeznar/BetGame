@@ -4,9 +4,8 @@ use Illuminate\Support\Facades\Broadcast;
 use App\Models\GamePlayer;
 
 Broadcast::channel('game.{gameId}', function ($user, $gameId) {
-    return GamePlayer::where('game_id', $gameId)
-        ->where('user_id', $user->id)
-        ->exists();
+    // Allow any authenticated user to spectate or play
+    return true; 
 });
 
 Broadcast::channel('player.{gamePlayerId}', function ($user, $gamePlayerId) {

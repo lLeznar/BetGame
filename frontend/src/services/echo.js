@@ -9,6 +9,8 @@ export function getEcho() {
   window.Pusher = Pusher;
   
   try {
+    const token = localStorage.getItem('auth_token');
+    
     const config = {
       broadcaster: 'reverb',
       key: import.meta.env.VITE_REVERB_APP_KEY ?? 'simfd0hzcr3cwtvbbbsu',
@@ -17,6 +19,13 @@ export function getEcho() {
       wssPort: import.meta.env.VITE_REVERB_PORT ?? 8081,
       forceTLS: (import.meta.env.VITE_REVERB_SCHEME ?? 'http') === 'https',
       enabledTransports: ['ws', 'wss'],
+      authEndpoint: '/broadcasting/auth',
+      auth: {
+        headers: {
+          Authorization: token ? `Bearer ${token}` : '',
+          Accept: 'application/json',
+        },
+      },
     };
     
     console.log('Initializing Echo with config:', config);
@@ -27,6 +36,14 @@ export function getEcho() {
   }
   
   return echoInstance;
+}
+
+// Call this after login/register to rebuild Echo with the fresh auth token
+export function resetEcho() {
+  if (echoInstance) {
+    try { echoInstance.disconnect(); } catch (e) { /* ignore */ }
+    echoInstance = null;
+  }
 }
 
 // Robust proxy to prevent crashes if echo is null

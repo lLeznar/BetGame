@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const Panel = styled.div`
-  background: rgba(0,0,0,0.8);
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(10px);
   border-top: 2px solid var(--color-gold);
   padding: 20px;
   position: fixed;
@@ -10,10 +11,11 @@ const Panel = styled.div`
   left: 0;
   right: 0;
   display: flex;
-  gap: 10px;
-  z-index: 50;
+  gap: 15px;
+  z-index: 1000;
   justify-content: center;
   align-items: center;
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
 `;
 
 const Btn = styled.button`

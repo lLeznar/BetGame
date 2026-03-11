@@ -10,6 +10,7 @@ export const GameProvider = ({ children }) => {
     const [game, setGame] = useState(null);
     const [myHand, setMyHand] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [roundResult, setRoundResult] = useState(null);
 
     // Refresh game state fully
     const fetchGameState = async (gameId) => {
@@ -43,7 +44,7 @@ export const GameProvider = ({ children }) => {
             })
             .listen('RoundSettled', (e) => {
                 console.log('RoundSettled', e);
-                // Trigger modal or similar side-effects in components
+                setRoundResult(e.result ?? e);
             })
             .listen('SideBetResult', (e) => {
                 console.log('SideBetResult', e);
@@ -118,6 +119,13 @@ export const GameProvider = ({ children }) => {
          await api.post(`/rounds/${currentRound.id}/call`);
     };
 
+    const check = async () => {
+         if (!game) return;
+         const currentRound = game.rounds[0];
+         if (!currentRound) return;
+         await api.post(`/rounds/${currentRound.id}/check`);
+    };
+
     const fold = async () => {
          if (!game) return;
          const currentRound = game.rounds[0];
@@ -145,10 +153,13 @@ export const GameProvider = ({ children }) => {
          return res.data.amount;
     };
 
+    const clearRoundResult = () => setRoundResult(null);
+
     return (
         <GameContext.Provider value={{ 
             game, 
-            myHand, 
+            myHand,
+            roundResult,
             loading, 
             fetchGameState, 
             createGame, 
@@ -156,10 +167,12 @@ export const GameProvider = ({ children }) => {
             startRound,
             placeBet,
             call,
+            check,
             fold,
             settleRound,
             addFunds,
-            getCallAmount
+            getCallAmount,
+            clearRoundResult
         }}
         >
             {children}

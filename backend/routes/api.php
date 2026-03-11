@@ -22,6 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::post('/rounds/{round}/bet', [BettingController::class, 'bet']);
     Route::post('/rounds/{round}/call', [BettingController::class, 'call']);
+    Route::post('/rounds/{round}/check', [BettingController::class, 'check']);
     Route::post('/rounds/{round}/fold', [BettingController::class, 'fold']);
     Route::get('/rounds/{round}/call-amount', [BettingController::class, 'callAmount']);
 

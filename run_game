@@ -1,0 +1,23 @@
+You need 4 separate terminal windows open at the same time:
+
+Terminal 1:
+
+powershell
+cd "z:\Leznar\Xampp\htdocs\Bet Game\backend"
+php artisan serve
+Terminal 2:
+
+powershell
+cd "z:\Leznar\Xampp\htdocs\Bet Game\backend"
+php artisan reverb:start
+Terminal 3:
+
+powershell
+cd "z:\Leznar\Xampp\htdocs\Bet Game\backend"
+php artisan queue:work
+Terminal 4:
+
+powershell
+cd "z:\Leznar\Xampp\htdocs\Bet Game\frontend"
+npm run dev
+Then open http://localhost:5173 in your browser.
